@@ -20,7 +20,7 @@ let compoGsi = (function() {
   };
   
   let local = {
-    client_id: '254780146992-ei6h2q5o17uiaiq5cegsjer1873pitdq.apps.googleusercontent.com',
+    client_id: '',
     scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email',
     tokenClient: null,
     isOnGoingAuthProcessStarted: false, 
