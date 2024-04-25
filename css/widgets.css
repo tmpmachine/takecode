@@ -1,0 +1,29 @@
+.wgp-WorkspaceItem:hover {
+  background: #f2f2f2;
+}
+
+.wg-Windog {
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  & {
+    padding: 0;
+    background: transparent;
+  }
+  .wrapper {
+    background: white;
+    position: relative;
+    padding: 1rem;
+  }
+  .backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  button:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+  }
+}

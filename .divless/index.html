@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>TakeCode</title>
+  
+  <meta name="viewport" content="width=device-width"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="css/widgets.css" rel="stylesheet"/>
+  <link href="css/app.css" rel="stylesheet"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css">
+  
+  <!--<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />-->
+  <style>
+  
+    /* fallback */
+    @font-face {
+      font-family: 'Material Symbols Outlined';
+      font-style: normal;
+      font-weight: 400;
+      src: url(fonts/materialsymbolsoutlined@v151.woff2) format('woff2');
+    }
+  
+    .icon-mt-o {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+
+</head>
+<body data-view-group="authorized-features" data-view-states="">
+<!-- ^# body -->
+  
+  <div class="d-flex h-100">
+    
+    <!-- # side menu  -->
+    [ {p:0.3rem} .d-flex .flex-column .ov-auto .side-menu {gap:0.5rem}
+      
+      <!-- library -->
+      [btn .clickable data-callback="navigate-screen" data-navigate-name-target="screen-main" .d-grid {gap:0.3rem}
+        [s 'dashboard' .icon-mt-o]
+        [small 'Library']
+      ]
+      
+      <!-- workspace -->
+      [btn .clickable data-callback="navigate-screen" data-navigate-name-target="screen-workspace" .d-grid {gap:0.3rem}
+        [s 'workspaces' .icon-mt-o]
+        [small 'Workspace']
+      ]
+
+      <!-- settings -->
+      [btn .clickable data-callback="navigate-screen" data-navigate-name-target="screen-settings" .d-grid {gap:0.3rem}
+        [s 'settings' .icon-mt-o]
+        [small 'Settings']
+      ]
+      
+    ]
+    
+    
+    <!-- # main window -->
+    <section style="flex:1" class="d-flex ov-hidden">
+    
+      <!-- # screen : main -->
+      <section class="container-screen d-flex is-active flex-column ov-hidden w-100" data-navigate-name="screen-main">
+      
+      
+        <!-- # pinned workspace -->
+        [ #list-workspace-tab .d-flex .clickable data-callback='on-workspace-tab-click' .user-select-none]
+      
+        [ .d-flex {flex:1} {ov:auto}
+          
+          <!-- # workspace section -->
+          [ .section-workspace .column .d-grid {rows:auto 1fr} .ov-auto
+            <!-- # left column content -->
+            
+            <section data-view-parent="workspace"> 
+              
+              <!-- # search -->
+              [ .d-grid {cols:1fr auto} {gap:0.5rem}
+                <input type="search" id="search" placeholder="Search..." autofocus="" class="focusable-on-slash-key mousetrap">
+                [btn 'New' .btn-default .clickable data-callback='show-add-modal']
+              ][ .gap-s]
+              
+              <!-- # labels filter -->
+              [ .d-flex .flex-wrap .align-items-center {gap:4px} {fs:12px} {mh:14px}
+                [small 'Searching post tagged : ']
+                [ #list-item-tags]
+              ][ .gap-s]
+              
+              
+              <!-- # tags filter -->
+              [ .d-flex .justify-content-between .align-items-center
+                <!-- section label -->
+                [ .d-flex .align-items-center
+                  [s .icon-mt-o 'label' {fs:1rem}][ .gap-x-xs]
+                  [small 'Tags']
+                ]
+                [ .d-flex {gap:0.3rem}
+                  [btn .icon-mt-o 'visibility' .clickable data-callback='toggle-section-label' .btn-xs .btn-default {fs:1rem}]
+                  |
+                  [btn .icon-mt-o 'add' .clickable data-callback='add-label' .btn-xs .btn-default {fs:1rem}]
+                ]
+              ][ .gap-s]
+  
+              
+              <!-- # labels -->
+              [ data-view-child='labels'
+                [small 'Labels']
+                <!-- # labels checkbox -->
+                [ #list-labels-input .clickable data-callback='workspace-click-handler' .user-select-none .d-grid {cols:1fr 1fr 1fr} {gap:0 0.3rem}][ .gap-s]
+              ]
+              
+            </section>
+            
+            <!-- # search results -->
+            [ .d-flex .h-100 .flex-column .ov-auto {mh:300px}
+              [ @recent .clickable data-callback="on-search-item-click"]
+            ]
+            
+            <!-- # newsletter -->
+            [ .section-feeds
+              [ .gap-m]
+              [ .container-feeds
+                [s .icon-mt-o 'feed']
+                newsletter goes here
+              ]
+            ]
+            
+          ]
+          
+          <!-- # main editor / snippets -->
+          <div id="main-section" class="section-main ov-hidden d-flex flex-column">
+            
+            <!-- # breadcrumbs -->
+            [ #txt-breadcrumb .breadcrumb-container .d-flex .align-items-center]
+            
+            <!-- # section snippets list -->
+            [ data-section="snippets" .d-flex .flex-column .h-100 .ov-hidden
+              [ {p:0.3rem 0.5rem} .d-flex .justify-content-between .snippet-toolbar
+                [ .d-flex {gap:0.7rem}
+                  [btn 'New' .clickable data-callback='show-modal-add-code' .btn-default]
+                  [in type='search' placeholder='Search keywords' .in-search-keywords]
+                ]
+                [btn .clickable data-callback='toggle-word-wrap' .icon-mt-o 'wrap_text' .btn-default]
+              ]
+              [ #snippets .snippets-container .clickable .ov-auto data-callback="handler-snippet" {flex-grow:1}]
+            ]
+            
+            <!-- # section editor -->
+            [ data-section="editor" .h-100 .d-grid
+            
+              [form data-name="snippet" .d-grid {rows:auto 1fr} .h-100
+              
+                <!-- # editor toolbar -->
+                [ {p:0.5rem} .editor-toolbar
+                  [in name='id' type='hidden']
+                  [ .d-inline-flex {gap:0.2rem} .align-items-center
+                    [btn .clickable data-callback='cancel-add-snippet' type='button' .icon-mt-o 'chevron_left' {fs:1rem} .btn-default]
+                    [btn 'Add' .clickable data-callback='add-snippet' type='button' .i-btn-submit .btn-default]
+                    [btn 'Update' .clickable data-callback='update-snippet' type='button' .i-btn-submit .btn-default]
+                    Type 
+                    [sel #sel-editor-type name='type' data-onchange='on-change-editor-type'
+                      [opt value='plaintext' 'Plain text']
+                      [opt value='code' 'Code']
+                    ]
+                    Language 
+                    [sel #sel-editor-language name='language' data-onchange='on-change-language'
+                      [opt value='java' 'Java']
+                      [opt value='js' 'JavaScript']
+                      [opt value='typescript' 'Typescript']
+                      [opt value='css' 'CSS']
+                      [opt value='html' 'HTML']
+                      [opt value='go' 'Go']
+                      [opt value='bash' 'Bash']
+                      [opt value='markdown' 'Markdown']
+                      [opt value='dart' 'Dart']
+                      [opt value='sql' 'SQL']
+                      [opt value='csharp' 'C#']
+                      [opt value='json' 'JSON']
+                    ]
+                  ]
+                ]
+                
+                [ {d:grid} .editor-container
+                  [t name='content']
+                ]
+                
+              ]
+            
+            ]
+            
+            
+          </div>
+          
+        ]
+      
+      </section>
+      
+      <!-- # screen : diff / conflict resolver -->
+      <section class="container-screen w-100 ov-auto" data-navigate-name="screen-diff">
+        
+        [ {p:1rem}
+          
+          [ .d-flex .justify-content-between
+            [btn .clickable data-callback="commit-resolve-conflict" 'Commit changes']
+            [btn .clickable data-callback="navigate-screen" data-navigate-name-target="screen-main" 'Close diff editor']
+          ]
+          
+          [hr]
+          
+          <!-- # list diff -->
+          [ .container-list-diff .clickable data-callback="list-diff-click-handler" .d-flex .flex-column {gap:0.3rem}]
+          [ {mb:2rem}]
+          
+          [hr]
+          
+          <!-- # conflict resolver container -->
+          [ {mb:1rem}]
+          [ .container-conflict-resolver .d-grid {cols:1fr 1fr} {gap:2rem} .clickable data-callback="handle-click-manual-resolve"
+          
+            [
+              [b 'Source']
+              <!-- # form source data -->
+              [ data-jss="#source"
+                [form data-name="source" .d-grid {gap:0.3rem}
+                
+                  [
+                    Title [in data-slot-text="title"]
+                  ]
+                  [
+                    Description [t data-slot-text="description"]
+                  ]
+                  [
+                    Labels [t data-slot-text="labels"]
+                  ]
+                ]
+                [ .container-list-code]
+              ]
+            ]
+            
+            [
+              [b 'Incoming']
+              <!-- # form incoming data -->
+              [ data-jss="#incoming"
+                [form data-name="incoming" .d-grid {gap:0.3rem}
+                  [
+                    Title [in data-slot-text="title"]
+                  ]
+                  [
+                    Description [t data-slot-text="description"]
+                  ]
+                  [
+                    Labels [t data-slot-text="labels"]
+                  ]  
+                ]
+                [ .container-list-code]
+              ]
+            ]
+            
+          ][ {mb:2rem}]
+          
+          [ .d-flex .justify-content-end
+            [btn type="button" 'Resolve with incoming' .clickable data-callback="accept-merge"]
+          ]
+         
+          
+        ]
+        
+      </section>
+      
+      <section class="container-screen w-100 ov-auto" data-navigate-name="screen-workspace">
+        [ {p:1rem}
+          Workspaces
+          [hr]
+          [
+            [btn 'Create workspace' .clickable data-callback='add-workspace' .btn-default {fs:1rem}]
+          ][ .gap-m]          
+
+          
+          <!-- # workspace list -->
+          [ #container-list-workspaces .clickable data-callback='handle-click-list-workspace']
+        ]
+      </section>
+      
+      <section class="container-screen w-100 ov-auto" data-navigate-name="screen-settings">
+        
+        [ {p:1rem}
+          [h1 'Settings']
+          [hr]
+          
+          <!-- # import & backup -->
+          
+          [h2 'Backup and Restore']
+          
+          [h3 'Cloud backup (Google Drive)']
+          
+          [ .d-flex .flex-wrap {gap:0.25rem}
+            <!-- cloup authorization -->
+            [ data-view-group="authorized-features" data-view-name-not="authorized"
+              [btn .btn-icon-text .clickable data-callback='google-authorize'
+                [ .inner
+                  Authorize
+                ]
+              ]
+            ]
+            
+            <!-- cloup backup -->
+            [ data-view-group="authorized-features" data-view-name="authorized"
+              
+              [btn .btn-icon-text .clickable data-callback='logout'
+                [ .inner
+                  Sign out
+                ]
+              ]
+              
+              [btn .btn-icon-text .clickable data-callback='backup-to-cloud' #btn-cloud-backup  {bg:dodgerblue;col:white}
+                [ .inner
+                  Backup to cloud [s 'backup' .icon-mt-o .icon]
+                ]
+              ]
+              
+              [btn .btn-icon-text .clickable data-callback='restore-from-cloud' #btn-cloud-restore {bg:dodgerblue;col:white}
+                [ .inner
+                  Restore [s 'cloud_download' .icon-mt-o .icon]
+                ]
+              ]
+            ]
+            
+          ]
+          <!-- # backup restore status text -->
+          [
+            [s #txt-backup-status]
+            [s #txt-restore-status]
+          ]
+          
+          <!-- local backup -->
+          [h3 'Local backup']
+          [ .d-flex .flex-wrap {gap:0.25rem}
+            [btn .btn-icon-text .clickable data-callback='export-db'
+              [ .inner
+                Download [s 'download' .icon-mt-o .icon]
+              ]
+            ]
+            [btn .btn-icon-text .clickable data-callback='import-db-migrate'
+              [ .inner
+                Upload [s 'upload' .icon-mt-o .icon]
+              ]
+            ]
+          ]
+          
+          <!-- # application data -->
+          [h2 'Application Data']
+          [
+            [btn .btn-icon-text .clickable data-callback='delete-data'
+              [ .inner
+                Clear application data [s 'delete_forever' .icon-mt-o .icon]
+              ]
+            ]
+          ]
+          
+          <!-- # app cache control-->
+          [h2 'Updates & Offline Access']
+         
+          [btn .btn-icon-text onclick='window.pwa.checkUpdates()'
+            [ .inner
+              Check for updates [s 'refresh' .icon-mt-o .icon]
+            ]
+          ]
+          [btn .btn-icon-text onclick='window.pwa.deleteUpdates()'
+            [ .inner
+              Remove app cache [s 'device_reset' .icon-mt-o .icon]
+            ]
+          ]
+          [ .pb-half]
+          [
+            [small
+              *) Removing app cache will disable offline access until you update the app manually by clicking on <b>Check for updates</b> button.
+            ]
+          ]
+        
+        ]
+        
+      </section>
+      
+    </section>
+    
+    
+  </div>
+  <style>
+    html, body {
+      height: 100%;
+      margin:0;
+    }
+  </style>
+  
+  <!-- $TEMPLATES # -->
+  
+  <template id="tmp-dialog-alert">
+    [dialog .wg-Windog
+      <!-- ^# tmp-dialog-alert -->
+      [ .backdrop]
+      [ .wrapper
+        
+        <form method="dialog" data-ref="form">
+          [ data-kind="message"]
+          [ .void .void-full]
+          [ .text-center
+            [btn 'Ok']
+          ]
+        </form>
+      ]
+    ]
+  </template>
+  <template id="tmp-dialog-prompt">
+    [dialog .wg-Windog
+      <!-- ^# tmp-dialog-alert -->
+      [ .backdrop]
+      [ .wrapper
+        
+        <form method="dialog" data-ref="form">
+          [ data-kind="message"]
+          [ .void .void-half]
+          
+          [in type="text" data-kind="input" .input-style-default]
+          [ .void .void-full]
+          
+          [ .d-flex .justify-content-end .gap-full
+            [btn 'Ok' value="ok"]
+            [btn 'Cancel']
+          ]
+        </form>
+      ]
+    ]
+  </template>
+  <template id="tmp-dialog-confirm">
+    [dialog .wg-Windog
+      <!-- ^# tmp-dialog-confirm -->
+      [ .backdrop]
+      [ .wrapper
+      
+        <form method="dialog" data-ref="form">
+          [ data-kind="message"]
+          [ .void .void-full]
+          [ .d-flex .justify-content-end .gap-full
+            [btn 'OK' value="ok"]
+            [btn 'Cancel']
+          ]
+        </form>
+      ]
+    ]
+  </template>
+
+  <template id="tmp-diff-item">
+    [ data-kind="item"
+      [s data-slot="title"]
+      [btn 'Take source' data-action="take-source"]
+      [btn 'Take incoming' data-action="take-incoming"]
+      [btn 'Solve manually' data-action="solve-manually"]
+    ]
+  </template>
+  
+  <template id="tmp-diff-item-snippet">
+    [ data-kind="item" .container-diff-item-snippet data-jss=".diff-item-snippet" data-id=""
+      
+      [ .d-flex .justify-content-end
+        [btn 'Remove' data-action="remove-snippet"]
+        [btn 'Take' data-action="take-snippet"]
+      ]
+      [ {mb:0.3rem}]
+      
+      [
+        Id : [in data-slot-text="id" disabled]
+      ]
+      [form .d-grid {gap:0.3rem}
+        [
+          Keywords [in data-slot-text="keywords"]
+        ]
+        [
+          Language [in data-slot-text="language"]
+        ]
+        [
+          Type [in data-slot-text="type"]
+        ]
+        [
+          Content [t data-slot-text="content" cols="50" rows="20"]
+        ]
+      ]
+  
+    ]
+  </template>
+  
+  
+  <!-- pinned workspace -->
+  <template id="tmp-workspace-tab">
+    [ data-kind='item' .workspace-tab .d-flex .flex-column data-id=''
+      [ .tab--title .d-flex
+        [s data-slot='name']
+        [btn .icon-mt-o 'close' .tab--btn-close data-kind='btn-delete']
+      ]
+    ]
+  </template>
+  
+  <template id="task-template">
+    <li>
+      <span class="task-text"></span>
+      <p class="task-description"></p>
+      <pre class="task-code"></pre>
+    </li>
+  </template>
+  
+  <!-- workspace radio input list -->
+  <template id="tmp-list-workspace">
+    [ data-kind='item'
+      [in type='radio' name='workspace' value=''] 
+      [l data-slot='name']
+    ]
+  </template>
+  
+  <template id="tmp-list-workspace-item">
+    <!-- # tmp-list-workspace-item -->
+    [ .wgp-WorkspaceItem data-kind="item" .d-flex .p-half
+      [ data-slot='name' .flex-1]
+      [
+        [btn 'Edit' data-action='edit']
+        [btn 'Delete' data-action='delete']
+      ]
+    ]
+  </template>
+  
+  <!-- labels checkbox -->
+  <template id="tmp-labels">
+    [l .d-flex .align-items-start
+      [in type='checkbox' value='{0}' name='labels'] 
+      [s '{0}']
+    ]
+  </template>
+  
+  <!-- searh result item -->
+  <template id="tmp-result">
+    [ data-is="item" {p:0.5rem} .i-item {mb:0.25rem} data-kind='item'
+      [ .d-flex .justify-content-between
+        <div class="title" data-slot="title" data-slot-html></div>
+        [ 
+          [btn data-callback="preview-code" .i-preview .icon-mt-o 'chevron_right' .btn-default]
+        ]
+      ]
+      <div class="description" data-slot="description" data-slot-html="description"></div>
+      <div class="snippets"></div>
+      [ {pt:0.25rem}]
+      [ {d:fex} {jt:end}
+        [btn data-callback="delete-code" .icon-mt-o 'delete' .btn-default]
+        [btn data-callback="edit-code" .icon-mt-o 'edit' .btn-default]
+      ]
+      [ {mt:0.3rem} .d-flex .justify-content-end
+         [small data-slot='labelsName']
+      ]
+    ]
+  </template>
+  
+  <template id="tmp-content-plaintext">
+    [ data-is="item" .i-item .pos-relative .d-flex
+      [ .i-hashtag]
+      [p data-slot='content' .i-content]
+      [ data-slot='' data-template='#tmp-content-buttons' .pos-absolute {t:0;r:0;} {h:100%} {z:1}]
+    ]
+  </template>
+  
+  <template id="tmp-content-code">
+    [ data-is="item" .i-item .pos-relative .d-flex
+      [ .i-hashtag]
+      [ .ov-hidden .w-100
+        [ data-slot='keywords']
+        [ .ov-hidden
+          <pre class="i-content">[code data-slot='content' .language-js]</pre>
+        ]
+      ]
+      [ data-slot='' data-template='#tmp-content-buttons' .pos-absolute {t:0;r:0;} {h:100%} {z:1}]
+    ]
+  </template>
+  
+  <template id="tmp-content-buttons">
+    [ .i-buttons-wrapper
+      [ data-is="item-tool" .i-buttons
+        [btn data-callback='copy' .i-btn-action .btn-default
+          [s .icon-mt-o 'content_copy']
+        ]
+        [btn data-callback='edit' .i-btn-action .btn-default
+          [s .icon-mt-o 'edit']
+        ]
+        [btn data-callback='edit-description' .i-btn-action .btn-default
+          [s .icon-mt-o 'description']
+        ]
+        [btn data-callback='delete' .i-btn-action .btn-default
+          [s .icon-mt-o 'delete']
+        ]
+      ]
+    ]
+  </template>
+  
+  <template id="tmp-snippets">
+    <div>
+      <div class="description" data-slot="description"></div>
+      <div data-slot="snippet"></div>
+    </div>
+  </template>
+  
+  <!-- $TEMPLATES -->
+  
+
+  <!-- $MODALS # -->
+
+  <modal-v2 id="projects-modal">
+    <div class="modal" slot="content">
+      <!-- modal toggler-->
+      [ .d-flex .justify-content-end
+        [ {p:0.7rem 1rem}
+          <button class="toggler btn-default">×</button>
+        ]
+      ]
+      
+      <!-- modal content-->
+      [ .ov-auto 
+        [ {p:1rem}
+          [form data-name="code" .submittable data-callback='on-submit-snippet-form'
+            [in name='id' type='hidden']
+            <label for="new-task">Title:</label>
+            <input type="text" id="new-task" name="new-task">
+            
+            <label for="new-task-description">Description:</label>
+            [ {d:grid} {h:80px}
+              <textarea id="new-task-description" name="new-task-description"></textarea>
+            ]
+            
+            <label>Labels:</label>
+            [ {pt:0.3rem} @sel-labels
+              [sel multiple]
+            ]
+            [ {pt:0.3rem} @sel-labels-v1
+              <input type="text" name="labels">
+            ]
+            
+            <!--<label for="new-task-code">Code Snippet:</label>-->
+            <!--<input type="text" id="new-task-code" name="new-task-code">-->
+            
+            [ {pt:0.3rem}]
+            [
+              [btn type='submit' 'Add' .i-btn-submit .btn-default]
+              [btn type='submit' 'Update' .i-btn-submit]
+            ]
+          ]
+        ]
+      ]
+    </div>
+  </modal-v2>
+  
+  <modal-v2 id="modal-code">
+    <div class="modal" slot="content">
+      <!-- modal toggler-->
+      [ .d-flex .justify-content-end
+        [ {p:0.7rem 1rem}
+          <button class="toggler btn-default">×</button>
+        ]
+      ]
+      
+      <!-- modal content-->
+      [ .ov-auto 
+        [ {p:1rem}
+        
+          
+          
+        ]
+      ]
+    </div>
+  </modal-v2>
+  
+  <modal-v2 id="modal-form-workspace">
+    <div class="modal" slot="content">
+      <!-- modal toggler-->
+      [ .d-flex .justify-content-end
+        [ {p:0.7rem 1rem}
+          <button class="toggler btn-default">×</button>
+        ]
+      ]
+      
+      <!-- modal content-->
+      [ .ov-auto 
+        [ {p:1rem}
+        
+          [form data-form-mode="--edit"
+          
+            <label for="new-task">Title:</label>
+            <input type="text" id="new-task" name="new-task">
+            [ {pt:0.3rem}]
+  
+            [
+              [btn type='submit' 'Add' .btn-default .custom-visibility .visible-on--add]
+              [btn type='submit' 'Update' .custom-visibility .visible-on--edit]
+            ]
+          ]
+          
+        ]
+      ]
+    </div>
+  </modal-v2>
+
+  <!-- $MODALS -->
+
+  
+  <!-- $commandPalette # -->
+
+  <style>
+    .search-box {
+      position: fixed;
+      z-index: 8177;
+      top: 0;
+      height: 0;
+      padding-top: 3rem;
+      width: 100%;
+      height: 100%;
+      background: #00000054;
+    }
+    #search-result {
+      background: white;
+    }
+    .search-hints {
+        padding: 0.5rem 1rem;
+    }
+      /* snippets search */
+    .search-hints.selected{background:#eee;}
+    .search-hints{border-top:1px solid #e8e8e8;}
+    .search-hints.last{border-bottom:1px solid #e8e8e8;}
+    .search-box a{text-decoration:none}
+  </style>
+  <div class="search-box d-none">
+    <div style="max-width:400px;margin:auto;">
+      [
+        <div>
+          [ {z-index:1;grid-template-columns:1fr auto;align-items:center}
+            <div class="button-tb ov-hidden">
+              <input id="search-input" autocomplete='off'  placeholder='Search snippets' type='text' name='q' style="border:0;padding:16px"/>
+            </div>
+          ]
+        </div>
+      ]
+      <div id="search-result" class="relative" style="z-index:1;top:-2px;"></div>
+    </div>
+  </div>
+  <template id="tmp-hints" class="Export">
+    <div class="w3-white">
+      <div class="Container" data-index="">
+        <div class="search-hints relative">
+          <div class="Title w3-padding w3-block"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template id="tmp-hints-last" class="Export">
+    <div class="w3-white ov-hidden" style="border-radius:0 0 4px 4px;">
+      <div class="Container" data-index="">
+        <div class="search-hints last relative">
+          <div class="Title w3-padding w3-block"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- $commandPalette -->
+
+  
+  
+  
+  
+  <script> window.$ = document.querySelector.bind(document); </script>
+  <script> window.$kind = (cssQuery, el) => el.querySelector(`[data-kind="${cssQuery}"]`); </script>
+  <script> window.$$ = document.querySelectorAll.bind(document); </script>
+  <script> window.asd = console.log; </script>
+  <script>
+    window.listenOn=function(e,t,l){for(let n of document.querySelectorAll(e))n.addEventListener(t,l[n.dataset.callback])};
+  </script>
+  <script>
+    ;(function() {
+      window.listening = function(selector, dataKey, eventType, callbacks) {
+        let elements = document.querySelectorAll(selector)
+        for (let el of elements) {
+          let callbackFunc = callbacks[el.dataset[dataKey]];
+          el.addEventListener(eventType, callbackFunc);
+        }
+      };
+    })();
+  </script>
+  <script src="js/components/gsi-component.js"></script>
+  <script src="js/core/component-loader.js"></script>
+  <script src="index.js"></script>
+  <script src="https://accounts.google.com/gsi/client" onload="compoGsi.InitTokenClient()" async defer></script>
+  
+  <script src="pwa-cacher.js"></script>
+  <script src="pwa.js"></script>
+  
+</body>
+</html>

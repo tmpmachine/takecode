@@ -1,0 +1,38 @@
+/* # hide with coditions */
+
+/* ## form state*/
+[data-form-mode="--add"] .custom-visibility:not(.visible-on--add),
+[data-form-mode="--edit"] .custom-visibility:not(.visible-on--edit) {
+  display: none;
+}
+
+/* sidebar section */
+.section-workspace:not([data-state~="--show-news"]) .section-feeds,
+
+/* main section */
+.section-main[data-state~="--editing"] [data-section="snippets"],
+.section-main:not([data-state~="--editing"]) [data-section="editor"],
+
+/* */
+[data-view-parent="workspace"]:not([data-state~="--show-label"]) [data-view-child='labels'],
+[data-view-parent="workspace"]:not([data-state~="--show-workspaces"]) [data-view-child='workspaces'],
+
+body[data-state~="--snippet-edit"] #projects-modal .i-btn-submit:nth-child(1),
+body:not([data-state~="--snippet-edit"]) #projects-modal .i-btn-submit:nth-child(2),
+body[data-state~="--code-edit"] #modal-code .i-btn-submit:nth-child(1),
+body:not([data-state~="--code-edit"]) #modal-code .i-btn-submit:nth-child(2),
+
+/* modals*/
+/*body[data-state~="--snippet-edit"] #projects-modal #sel-labels,*/
+/*body:not([data-state~="--snippet-edit"]) #projects-modal #sel-labels-v1,*/
+#projects-modal #sel-labels-v1,
+
+.d-none {
+  display: none;
+}
+
+
+/* # screens */
+.container-screen:not(.is-active) {
+  display: none;
+}

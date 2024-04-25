@@ -1,0 +1,68 @@
+{
+  "landing-page": [
+    "index.html",
+    "/"
+  ],
+  "root": [
+    "./",
+    "./index.html",
+    "js/app-data.js",
+    "js/app.js",
+    "js/ui.js",
+    "js/util.js",
+    "js/dom-events.js",
+    "js/test.js",
+    "js/drive-api.js",
+    
+    "pwa-cacher.js",
+    "pwa.js",
+    "js/index.js",
+    "js/core/component-loader.js",
+    "index.js",
+    
+    "js/view-states.js",
+        
+    "index.html",
+    "manifest.json"
+  ],
+  "vendors": [
+    "js/vendors/windog/windog.js",
+    "js/vendors/view-state-util/view-state-util.js"
+  ],
+  "components": [
+    "js/components/gsi-component.js",
+    "js/components/backup-component.js",
+    "js/components/compo-workspace.js",
+    "js/components/compo-diff.js",
+    "js/components/compo-notes.js",
+    "js/components/state-manager.js"
+  ],
+  "fonts": [
+    "fonts/materialsymbolsoutlined@v151.woff2"
+  ],
+  "css": [
+    "css/app.css",
+    "css/widgets.css",
+    "css/style.css"
+  ],
+  "external": [
+    "https://cdn.jsdelivr.net/gh/tmpmachine/lsdb.js@v1.0.0/lsdb.min.js",
+    "https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css",
+    "https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js",
+    
+    "https://cdn.jsdelivr.net/gh/ccampbell/mousetrap@v1.6.5/mousetrap.min.js",
+    "https://unpkg.com/dexie-export-import@1.0.3",
+    "https://unpkg.com/dexie@3.2.2",
+    "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css",
+    
+    "https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js",
+    "https://cdn.jsdelivr.net/gh/tmpmachine/templateslot.js@v1.0.0/templateslot.min.js",
+    "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js",
+    
+    "https://cdn.jsdelivr.net/gh/tmpmachine/statelist-utility@v1.0.2/statelist.min.js"
+  ],
+  "ace-code-editor": [
+    "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/theme-monokai.js"
+  ]
+}

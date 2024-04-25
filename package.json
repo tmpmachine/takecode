@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "setup": "node setup"
+  },
+  "devDependencies": {
+    "@tmp7/divless-html-watcher": "1.0.1",
+    "fs-extra": "9.1.0"
+  },
+  "dependencies": {
+    "@tmp7/view-state-util": "1.0.0",
+    "@tmp7/windog": "^1.0.0"
+  }
+}

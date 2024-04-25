@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>TakeCode</title>
+  
+  <meta name="viewport" content="width=device-width"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="css/widgets.css" rel="stylesheet"/>
+  <link href="css/app.css" rel="stylesheet"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/default.min.css">
+  
+  <!--<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />-->
+  <style>
+  
+    /* fallback */
+    @font-face {
+      font-family: 'Material Symbols Outlined';
+      font-style: normal;
+      font-weight: 400;
+      src: url(fonts/materialsymbolsoutlined@v151.woff2) format('woff2');
+    }
+  
+    .icon-mt-o {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+
+</head>
+<body data-view-group="authorized-features" data-view-states="">
+<!-- ^# body -->
+  
+  <div class="d-flex h-100">
+    
+    <!-- # side menu  -->
+    <div class="d-flex flex-column ov-auto side-menu" style="padding:0.3rem;gap:0.5rem;">
+      
+      <!-- library -->
+      <button class="clickable d-grid" data-callback="navigate-screen" data-navigate-name-target="screen-main" style="gap:0.3rem;">
+        <span class="icon-mt-o">dashboard</span>
+        <small>Library</small>
+      </button>
+      
+      <!-- workspace -->
+      <button class="clickable d-grid" data-callback="navigate-screen" data-navigate-name-target="screen-workspace" style="gap:0.3rem;">
+        <span class="icon-mt-o">workspaces</span>
+        <small>Workspace</small>
+      </button>
+
+      <!-- settings -->
+      <button class="clickable d-grid" data-callback="navigate-screen" data-navigate-name-target="screen-settings" style="gap:0.3rem;">
+        <span class="icon-mt-o">settings</span>
+        <small>Settings</small>
+      </button>
+      
+    </div>
+    
+    
+    <!-- # main window -->
+    <section style="flex:1" class="d-flex ov-hidden">
+    
+      <!-- # screen : main -->
+      <section class="container-screen d-flex is-active flex-column ov-hidden w-100" data-navigate-name="screen-main">
+      
+      
+        <!-- # pinned workspace -->
+        <div id="list-workspace-tab" class="d-flex clickable user-select-none" data-callback='on-workspace-tab-click'></div>
+      
+        <div class="d-flex" style="flex:1;overflow:auto;">
+          
+          <!-- # workspace section -->
+          <div class="section-workspace column d-grid ov-auto" style="grid-template-rows:auto 1fr;">
+            <!-- # left column content -->
+            
+            <section data-view-parent="workspace"> 
+              
+              <!-- # search -->
+              <div class="d-grid" style="grid-template-columns:1fr auto;gap:0.5rem;">
+                <input type="search" id="search" placeholder="Search..." autofocus="" class="focusable-on-slash-key mousetrap">
+                <button class="btn-default clickable" data-callback='show-add-modal'>New</button>
+              </div><div class="gap-s"></div>
+              
+              <!-- # labels filter -->
+              <div class="d-flex flex-wrap align-items-center" style="gap:4px;font-size:12px;min-height:14px;">
+                <small>Searching post tagged : </small>
+                <div id="list-item-tags"></div>
+              </div><div class="gap-s"></div>
+              
+              
+              <!-- # tags filter -->
+              <div class="d-flex justify-content-between align-items-center">
+                <!-- section label -->
+                <div class="d-flex align-items-center">
+                  <span class="icon-mt-o" style="font-size:1rem;">label</span><div class="gap-x-xs"></div>
+                  <small>Tags</small>
+                </div>
+                <div class="d-flex" style="gap:0.3rem;">
+                  <button class="icon-mt-o clickable btn-xs btn-default" data-callback='toggle-section-label' style="font-size:1rem;">visibility</button>
+                  |
+                  <button class="icon-mt-o clickable btn-xs btn-default" data-callback='add-label' style="font-size:1rem;">add</button>
+                </div>
+              </div><div class="gap-s"></div>
+  
+              
+              <!-- # labels -->
+              <div data-view-child='labels'>
+                <small>Labels</small>
+                <!-- # labels checkbox -->
+                <div id="list-labels-input" class="clickable user-select-none d-grid" data-callback='workspace-click-handler' style="grid-template-columns:1fr 1fr 1fr;gap:0 0.3rem;"></div><div class="gap-s"></div>
+              </div>
+              
+            </section>
+            
+            <!-- # search results -->
+            <div class="d-flex h-100 flex-column ov-auto" style="min-height:300px;">
+              <div id="recent" class="clickable" data-callback="on-search-item-click"></div>
+            </div>
+            
+            <!-- # newsletter -->
+            <div class="section-feeds">
+              <div class="gap-m"></div>
+              <div class="container-feeds">
+                <span class="icon-mt-o">feed</span>
+                newsletter goes here
+              </div>
+            </div>
+            
+          </div>
+          
+          <!-- # main editor / snippets -->
+          <div id="main-section" class="section-main ov-hidden d-flex flex-column">
+            
+            <!-- # breadcrumbs -->
+            <div id="txt-breadcrumb" class="breadcrumb-container d-flex align-items-center"></div>
+            
+            <!-- # section snippets list -->
+            <div class="d-flex flex-column h-100 ov-hidden" data-section="snippets">
+              <div class="d-flex justify-content-between snippet-toolbar" style="padding:0.3rem 0.5rem;">
+                <div class="d-flex" style="gap:0.7rem;">
+                  <button class="clickable btn-default" data-callback='show-modal-add-code'>New</button>
+                  <input class="in-search-keywords" type='search' placeholder='Search keywords'/>
+                </div>
+                <button class="clickable icon-mt-o btn-default" data-callback='toggle-word-wrap'>wrap_text</button>
+              </div>
+              <div id="snippets" class="snippets-container clickable ov-auto" data-callback="handler-snippet" style="flex-grow:1;"></div>
+            </div>
+            
+            <!-- # section editor -->
+            <div class="h-100 d-grid" data-section="editor">
+            
+              <form class="d-grid h-100" data-name="snippet" style="grid-template-rows:auto 1fr;">
+              
+                <!-- # editor toolbar -->
+                <div class="editor-toolbar" style="padding:0.5rem;">
+                  <input name='id' type='hidden'/>
+                  <div class="d-inline-flex align-items-center" style="gap:0.2rem;">
+                    <button class="clickable icon-mt-o btn-default" data-callback='cancel-add-snippet' type='button' style="font-size:1rem;">chevron_left</button>
+                    <button class="clickable i-btn-submit btn-default" data-callback='add-snippet' type='button'>Add</button>
+                    <button class="clickable i-btn-submit btn-default" data-callback='update-snippet' type='button'>Update</button>
+                    Type 
+                    <select id="sel-editor-type" name='type' data-onchange='on-change-editor-type'>
+                      <option value='plaintext'>Plain text</option>
+                      <option value='code'>Code</option>
+                    </select>
+                    Language 
+                    <select id="sel-editor-language" name='language' data-onchange='on-change-language'>
+                      <option value='java'>Java</option>
+                      <option value='js'>JavaScript</option>
+                      <option value='typescript'>Typescript</option>
+                      <option value='css'>CSS</option>
+                      <option value='html'>HTML</option>
+                      <option value='go'>Go</option>
+                      <option value='bash'>Bash</option>
+                      <option value='markdown'>Markdown</option>
+                      <option value='dart'>Dart</option>
+                      <option value='sql'>SQL</option>
+                      <option value='csharp'>C#</option>
+                      <option value='json'>JSON</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="editor-container" style="display:grid;">
+                  <textarea name='content'></textarea>
+                </div>
+                
+              </form>
+            
+            </div>
+            
+            
+          </div>
+          
+        </div>
+      
+      </section>
+      
+      <!-- # screen : diff / conflict resolver -->
+      <section class="container-screen w-100 ov-auto" data-navigate-name="screen-diff">
+        
+        <div style="padding:1rem;">
+          
+          <div class="d-flex justify-content-between">
+            <button class="clickable" data-callback="commit-resolve-conflict">Commit changes</button>
+            <button class="clickable" data-callback="navigate-screen" data-navigate-name-target="screen-main">Close diff editor</button>
+          </div>
+          
+          <hr/>
+          
+          <!-- # list diff -->
+          <div class="container-list-diff clickable d-flex flex-column" data-callback="list-diff-click-handler" style="gap:0.3rem;"></div>
+          <div style="margin-bottom:2rem;"></div>
+          
+          <hr/>
+          
+          <!-- # conflict resolver container -->
+          <div style="margin-bottom:1rem;"></div>
+          <div class="container-conflict-resolver d-grid clickable" data-callback="handle-click-manual-resolve" style="grid-template-columns:1fr 1fr;gap:2rem;">
+          
+            <div>
+              <b>Source</b>
+              <!-- # form source data -->
+              <div data-jss="#source">
+                <form class="d-grid" data-name="source" style="gap:0.3rem;">
+                
+                  <div>
+                    Title <input data-slot-text="title"/>
+                  </div>
+                  <div>
+                    Description <textarea data-slot-text="description"></textarea>
+                  </div>
+                  <div>
+                    Labels <textarea data-slot-text="labels"></textarea>
+                  </div>
+                </form>
+                <div class="container-list-code"></div>
+              </div>
+            </div>
+            
+            <div>
+              <b>Incoming</b>
+              <!-- # form incoming data -->
+              <div data-jss="#incoming">
+                <form class="d-grid" data-name="incoming" style="gap:0.3rem;">
+                  <div>
+                    Title <input data-slot-text="title"/>
+                  </div>
+                  <div>
+                    Description <textarea data-slot-text="description"></textarea>
+                  </div>
+                  <div>
+                    Labels <textarea data-slot-text="labels"></textarea>
+                  </div>  
+                </form>
+                <div class="container-list-code"></div>
+              </div>
+            </div>
+            
+          </div><div style="margin-bottom:2rem;"></div>
+          
+          <div class="d-flex justify-content-end">
+            <button class="clickable" type="button" data-callback="accept-merge">Resolve with incoming</button>
+          </div>
+         
+          
+        </div>
+        
+      </section>
+      
+      <section class="container-screen w-100 ov-auto" data-navigate-name="screen-workspace">
+        <div style="padding:1rem;">
+          Workspaces
+          <hr/>
+          <div>
+            <button class="clickable btn-default" data-callback='add-workspace' style="font-size:1rem;">Create workspace</button>
+          </div><div class="gap-m"></div>          
+
+          
+          <!-- # workspace list -->
+          <div id="container-list-workspaces" class="clickable" data-callback='handle-click-list-workspace'></div>
+        </div>
+      </section>
+      
+      <section class="container-screen w-100 ov-auto" data-navigate-name="screen-settings">
+        
+        <div style="padding:1rem;">
+          <h1>Settings</h1>
+          <hr/>
+          
+          <!-- # import & backup -->
+          
+          <h2>Backup and Restore</h2>
+          
+          <h3>Cloud backup (Google Drive)</h3>
+          
+          <div class="d-flex flex-wrap" style="gap:0.25rem;">
+            <!-- cloup authorization -->
+            <div data-view-group="authorized-features" data-view-name-not="authorized">
+              <button class="btn-icon-text clickable" data-callback='google-authorize'>
+                <div class="inner">
+                  Authorize
+                </div>
+              </button>
+            </div>
+            
+            <!-- cloup backup -->
+            <div data-view-group="authorized-features" data-view-name="authorized">
+              
+              <button class="btn-icon-text clickable" data-callback='logout'>
+                <div class="inner">
+                  Sign out
+                </div>
+              </button>
+              
+              <button id="btn-cloud-backup" class="btn-icon-text clickable" data-callback='backup-to-cloud' style="background:dodgerblue;color:white;">
+                <div class="inner">
+                  Backup to cloud <span class="icon-mt-o icon">backup</span>
+                </div>
+              </button>
+              
+              <button id="btn-cloud-restore" class="btn-icon-text clickable" data-callback='restore-from-cloud' style="background:dodgerblue;color:white;">
+                <div class="inner">
+                  Restore <span class="icon-mt-o icon">cloud_download</span>
+                </div>
+              </button>
+            </div>
+            
+          </div>
+          <!-- # backup restore status text -->
+          <div>
+            <span id="txt-backup-status"></span>
+            <span id="txt-restore-status"></span>
+          </div>
+          
+          <!-- local backup -->
+          <h3>Local backup</h3>
+          <div class="d-flex flex-wrap" style="gap:0.25rem;">
+            <button class="btn-icon-text clickable" data-callback='export-db'>
+              <div class="inner">
+                Download <span class="icon-mt-o icon">download</span>
+              </div>
+            </button>
+            <button class="btn-icon-text clickable" data-callback='import-db-migrate'>
+              <div class="inner">
+                Upload <span class="icon-mt-o icon">upload</span>
+              </div>
+            </button>
+          </div>
+          
+          <!-- # application data -->
+          <h2>Application Data</h2>
+          <div>
+            <button class="btn-icon-text clickable" data-callback='delete-data'>
+              <div class="inner">
+                Clear application data <span class="icon-mt-o icon">delete_forever</span>
+              </div>
+            </button>
+          </div>
+          
+          <!-- # app cache control-->
+          <h2>Updates & Offline Access</h2>
+         
+          <button class="btn-icon-text" onclick='window.pwa.checkUpdates()'>
+            <div class="inner">
+              Check for updates <span class="icon-mt-o icon">refresh</span>
+            </div>
+          </button>
+          <button class="btn-icon-text" onclick='window.pwa.deleteUpdates()'>
+            <div class="inner">
+              Remove app cache <span class="icon-mt-o icon">device_reset</span>
+            </div>
+          </button>
+          <div class="pb-half"></div>
+          <div>
+            <small>
+              *) Removing app cache will disable offline access until you update the app manually by clicking on <b>Check for updates</b> button.
+            </small>
+          </div>
+        
+        </div>
+        
+      </section>
+      
+    </section>
+    
+    
+  </div>
+  <style>
+    html, body {
+      height: 100%;
+      margin:0;
+    }
+  </style>
+  
+  <!-- $TEMPLATES # -->
+  
+  <template id="tmp-dialog-alert">
+    <dialog class="wg-Windog">
+      <!-- ^# tmp-dialog-alert -->
+      <div class="backdrop"></div>
+      <div class="wrapper">
+        
+        <form method="dialog" data-ref="form">
+          <div data-kind="message"></div>
+          <div class="void void-full"></div>
+          <div class="text-center">
+            <button>Ok</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+  </template>
+  <template id="tmp-dialog-prompt">
+    <dialog class="wg-Windog">
+      <!-- ^# tmp-dialog-alert -->
+      <div class="backdrop"></div>
+      <div class="wrapper">
+        
+        <form method="dialog" data-ref="form">
+          <div data-kind="message"></div>
+          <div class="void void-half"></div>
+          
+          <input class="input-style-default" type="text" data-kind="input"/>
+          <div class="void void-full"></div>
+          
+          <div class="d-flex justify-content-end gap-full">
+            <button value="ok">Ok</button>
+            <button>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+  </template>
+  <template id="tmp-dialog-confirm">
+    <dialog class="wg-Windog">
+      <!-- ^# tmp-dialog-confirm -->
+      <div class="backdrop"></div>
+      <div class="wrapper">
+      
+        <form method="dialog" data-ref="form">
+          <div data-kind="message"></div>
+          <div class="void void-full"></div>
+          <div class="d-flex justify-content-end gap-full">
+            <button value="ok">OK</button>
+            <button>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+  </template>
+
+  <template id="tmp-diff-item">
+    <div data-kind="item">
+      <span data-slot="title"></span>
+      <button data-action="take-source">Take source</button>
+      <button data-action="take-incoming">Take incoming</button>
+      <button data-action="solve-manually">Solve manually</button>
+    </div>
+  </template>
+  
+  <template id="tmp-diff-item-snippet">
+    <div class="container-diff-item-snippet" data-kind="item" data-jss=".diff-item-snippet" data-id="">
+      
+      <div class="d-flex justify-content-end">
+        <button data-action="remove-snippet">Remove</button>
+        <button data-action="take-snippet">Take</button>
+      </div>
+      <div style="margin-bottom:0.3rem;"></div>
+      
+      <div>
+        Id : <input data-slot-text="id" disabled/>
+      </div>
+      <form class="d-grid" style="gap:0.3rem;">
+        <div>
+          Keywords <input data-slot-text="keywords"/>
+        </div>
+        <div>
+          Language <input data-slot-text="language"/>
+        </div>
+        <div>
+          Type <input data-slot-text="type"/>
+        </div>
+        <div>
+          Content <textarea data-slot-text="content" cols="50" rows="20"></textarea>
+        </div>
+      </form>
+  
+    </div>
+  </template>
+  
+  
+  <!-- pinned workspace -->
+  <template id="tmp-workspace-tab">
+    <div class="workspace-tab d-flex flex-column" data-kind='item' data-id=''>
+      <div class="tab--title d-flex">
+        <span data-slot='name'></span>
+        <button class="icon-mt-o tab--btn-close" data-kind='btn-delete'>close</button>
+      </div>
+    </div>
+  </template>
+  
+  <template id="task-template">
+    <li>
+      <span class="task-text"></span>
+      <p class="task-description"></p>
+      <pre class="task-code"></pre>
+    </li>
+  </template>
+  
+  <!-- workspace radio input list -->
+  <template id="tmp-list-workspace">
+    <div data-kind='item'>
+      <input type='radio' name='workspace' value=''/> 
+      <label data-slot='name'></label>
+    </div>
+  </template>
+  
+  <template id="tmp-list-workspace-item">
+    <!-- # tmp-list-workspace-item -->
+    <div class="wgp-WorkspaceItem d-flex p-half" data-kind="item">
+      <div class="flex-1" data-slot='name'></div>
+      <div>
+        <button data-action='edit'>Edit</button>
+        <button data-action='delete'>Delete</button>
+      </div>
+    </div>
+  </template>
+  
+  <!-- labels checkbox -->
+  <template id="tmp-labels">
+    <label class="d-flex align-items-start">
+      <input type='checkbox' value='{0}' name='labels'/> 
+      <span>{0}</span>
+    </label>
+  </template>
+  
+  <!-- searh result item -->
+  <template id="tmp-result">
+    <div class="i-item" data-is="item" data-kind='item' style="padding:0.5rem;margin-bottom:0.25rem;">
+      <div class="d-flex justify-content-between">
+        <div class="title" data-slot="title" data-slot-html></div>
+        <div>
+          <button class="i-preview icon-mt-o btn-default" data-callback="preview-code">chevron_right</button>
+        </div>
+      </div>
+      <div class="description" data-slot="description" data-slot-html="description"></div>
+      <div class="snippets"></div>
+      <div style="padding-top:0.25rem;"></div>
+      <div style="display:fex;justify-content:end;">
+        <button class="icon-mt-o btn-default" data-callback="delete-code">delete</button>
+        <button class="icon-mt-o btn-default" data-callback="edit-code">edit</button>
+      </div>
+      <div class="d-flex justify-content-end" style="margin-top:0.3rem;">
+         <small data-slot='labelsName'></small>
+      </div>
+    </div>
+  </template>
+  
+  <template id="tmp-content-plaintext">
+    <div class="i-item pos-relative d-flex" data-is="item">
+      <div class="i-hashtag"></div>
+      <p class="i-content" data-slot='content'></p>
+      <div class="pos-absolute" data-slot='' data-template='#tmp-content-buttons' style="top:0;right:0;height:100%;z-index:1;"></div>
+    </div>
+  </template>
+  
+  <template id="tmp-content-code">
+    <div class="i-item pos-relative d-flex" data-is="item">
+      <div class="i-hashtag"></div>
+      <div class="ov-hidden w-100">
+        <div data-slot='keywords'></div>
+        <div class="ov-hidden">
+          <pre class="i-content"><code class="language-js" data-slot='content'></code></pre>
+        </div>
+      </div>
+      <div class="pos-absolute" data-slot='' data-template='#tmp-content-buttons' style="top:0;right:0;height:100%;z-index:1;"></div>
+    </div>
+  </template>
+  
+  <template id="tmp-content-buttons">
+    <div class="i-buttons-wrapper">
+      <div class="i-buttons" data-is="item-tool">
+        <button class="i-btn-action btn-default" data-callback='copy'>
+          <span class="icon-mt-o">content_copy</span>
+        </button>
+        <button class="i-btn-action btn-default" data-callback='edit'>
+          <span class="icon-mt-o">edit</span>
+        </button>
+        <button class="i-btn-action btn-default" data-callback='edit-description'>
+          <span class="icon-mt-o">description</span>
+        </button>
+        <button class="i-btn-action btn-default" data-callback='delete'>
+          <span class="icon-mt-o">delete</span>
+        </button>
+      </div>
+    </div>
+  </template>
+  
+  <template id="tmp-snippets">
+    <div>
+      <div class="description" data-slot="description"></div>
+      <div data-slot="snippet"></div>
+    </div>
+  </template>
+  
+  <!-- $TEMPLATES -->
+  
+
+  <!-- $MODALS # -->
+
+  <modal-v2 id="projects-modal">
+    <div class="modal" slot="content">
+      <!-- modal toggler-->
+      <div class="d-flex justify-content-end">
+        <div style="padding:0.7rem 1rem;">
+          <button class="toggler btn-default">×</button>
+        </div>
+      </div>
+      
+      <!-- modal content-->
+      <div class="ov-auto">
+        <div style="padding:1rem;">
+          <form class="submittable" data-name="code" data-callback='on-submit-snippet-form'>
+            <input name='id' type='hidden'/>
+            <label for="new-task">Title:</label>
+            <input type="text" id="new-task" name="new-task">
+            
+            <label for="new-task-description">Description:</label>
+            <div style="display:grid;height:80px;">
+              <textarea id="new-task-description" name="new-task-description"></textarea>
+            </div>
+            
+            <label>Labels:</label>
+            <div id="sel-labels" style="padding-top:0.3rem;">
+              <select multiple></select>
+            </div>
+            <div id="sel-labels-v1" style="padding-top:0.3rem;">
+              <input type="text" name="labels">
+            </div>
+            
+            <!--<label for="new-task-code">Code Snippet:</label>-->
+            <!--<input type="text" id="new-task-code" name="new-task-code">-->
+            
+            <div style="padding-top:0.3rem;"></div>
+            <div>
+              <button class="i-btn-submit btn-default" type='submit'>Add</button>
+              <button class="i-btn-submit" type='submit'>Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </modal-v2>
+  
+  <modal-v2 id="modal-code">
+    <div class="modal" slot="content">
+      <!-- modal toggler-->
+      <div class="d-flex justify-content-end">
+        <div style="padding:0.7rem 1rem;">
+          <button class="toggler btn-default">×</button>
+        </div>
+      </div>
+      
+      <!-- modal content-->
+      <div class="ov-auto">
+        <div style="padding:1rem;">
+        
+          
+          
+        </div>
+      </div>
+    </div>
+  </modal-v2>
+  
+  <modal-v2 id="modal-form-workspace">
+    <div class="modal" slot="content">
+      <!-- modal toggler-->
+      <div class="d-flex justify-content-end">
+        <div style="padding:0.7rem 1rem;">
+          <button class="toggler btn-default">×</button>
+        </div>
+      </div>
+      
+      <!-- modal content-->
+      <div class="ov-auto">
+        <div style="padding:1rem;">
+        
+          <form data-form-mode="--edit">
+          
+            <label for="new-task">Title:</label>
+            <input type="text" id="new-task" name="new-task">
+            <div style="padding-top:0.3rem;"></div>
+  
+            <div>
+              <button class="btn-default custom-visibility visible-on--add" type='submit'>Add</button>
+              <button class="custom-visibility visible-on--edit" type='submit'>Update</button>
+            </div>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+  </modal-v2>
+
+  <!-- $MODALS -->
+
+  
+  <!-- $commandPalette # -->
+
+  <style>
+    .search-box {
+      position: fixed;
+      z-index: 8177;
+      top: 0;
+      height: 0;
+      padding-top: 3rem;
+      width: 100%;
+      height: 100%;
+      background: #00000054;
+    }
+    #search-result {
+      background: white;
+    }
+    .search-hints {
+        padding: 0.5rem 1rem;
+    }
+      /* snippets search */
+    .search-hints.selected{background:#eee;}
+    .search-hints{border-top:1px solid #e8e8e8;}
+    .search-hints.last{border-bottom:1px solid #e8e8e8;}
+    .search-box a{text-decoration:none}
+  </style>
+  <div class="search-box d-none">
+    <div style="max-width:400px;margin:auto;">
+      <div>
+        <div>
+          <div style="z-index:1;grid-template-columns:1fr auto;align-items:center;">
+            <div class="button-tb ov-hidden">
+              <input id="search-input" autocomplete='off'  placeholder='Search snippets' type='text' name='q' style="border:0;padding:16px"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="search-result" class="relative" style="z-index:1;top:-2px;"></div>
+    </div>
+  </div>
+  <template id="tmp-hints" class="Export">
+    <div class="w3-white">
+      <div class="Container" data-index="">
+        <div class="search-hints relative">
+          <div class="Title w3-padding w3-block"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template id="tmp-hints-last" class="Export">
+    <div class="w3-white ov-hidden" style="border-radius:0 0 4px 4px;">
+      <div class="Container" data-index="">
+        <div class="search-hints last relative">
+          <div class="Title w3-padding w3-block"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- $commandPalette -->
+
+  
+  
+  
+  
+  <script> window.$ = document.querySelector.bind(document); </script>
+  <script> window.$kind = (cssQuery, el) => el.querySelector(`[data-kind="${cssQuery}"]`); </script>
+  <script> window.$$ = document.querySelectorAll.bind(document); </script>
+  <script> window.asd = console.log; </script>
+  <script>
+    window.listenOn=function(e,t,l){for(let n of document.querySelectorAll(e))n.addEventListener(t,l[n.dataset.callback])};
+  </script>
+  <script>
+    ;(function() {
+      window.listening = function(selector, dataKey, eventType, callbacks) {
+        let elements = document.querySelectorAll(selector)
+        for (let el of elements) {
+          let callbackFunc = callbacks[el.dataset[dataKey]];
+          el.addEventListener(eventType, callbackFunc);
+        }
+      };
+    })();
+  </script>
+  <script src="js/components/gsi-component.js"></script>
+  <script src="js/core/component-loader.js"></script>
+  <script src="index.js"></script>
+  <script src="https://accounts.google.com/gsi/client" onload="compoGsi.InitTokenClient()" async defer></script>
+  
+  <script src="pwa-cacher.js"></script>
+  <script src="pwa.js"></script>
+  
+</body>
+</html>

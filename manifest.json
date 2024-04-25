@@ -1,0 +1,19 @@
+{
+  "name": "TakeCode",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "images/192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "background_color": "#202020",
+  "theme_color": "#202020"
+}
