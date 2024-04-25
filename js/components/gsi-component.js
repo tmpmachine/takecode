@@ -90,7 +90,7 @@ let compoGsi = (function() {
         RequestToken();
         await TaskWaitUntil(CheckNoOngoingAuthProcess, 500);
       } else {
-        distributeTokenToComponentsAsync();
+        await distributeTokenToComponentsAsync();
       }
       
       resolve();
@@ -127,7 +127,7 @@ let compoGsi = (function() {
     });
   }
   
-  function onTokenResponse(tokenResponse) {
+  async function onTokenResponse(tokenResponse) {
     try {
       
       data.access_token = tokenResponse.access_token;
@@ -136,7 +136,7 @@ let compoGsi = (function() {
       
       readToken();
       
-      distributeTokenToComponentsAsync();
+      await distributeTokenToComponentsAsync();
       reloadAuthState();
       
     } catch (e) {
