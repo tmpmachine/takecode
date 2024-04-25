@@ -38,7 +38,7 @@
     "js/components/state-manager.js"
   ],
   "fonts": [
-    "fonts/materialsymbolsoutlined@v151.woff2"
+    "https://fonts.gstatic.com/s/materialsymbolsoutlined/v175/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1v-p_4MrImHCIJIZrDCvHOej.woff2"
   ],
   "css": [
     "css/app.css",
