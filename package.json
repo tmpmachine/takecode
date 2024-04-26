@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "setup": "node setup"
+    "setup": "node setup",
+    "divless": "divless watch"
   },
   "devDependencies": {
-    "@tmp7/divless-html-watcher": "1.0.1",
+    "@tmp7/divless-html-watcher": "1.0.2",
     "fs-extra": "9.1.0"
   },
   "dependencies": {
