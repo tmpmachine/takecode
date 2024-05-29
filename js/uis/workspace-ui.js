@@ -20,8 +20,13 @@ let uiWorkspace = (function() {
         workspaceItem: {
             'edit': (data) => Edit(data),
             'delete': (data) => confirmWorkspaceDelete(data),
+            'manage-labels': (data) => ManageLabels(data),
         }
     };
+
+    function ManageLabels(data) {
+        windog.alert('WIP')
+    }
 
     function HandleMouseEvt(evt) {
         if (evt.button !== 1) return;
@@ -158,7 +163,7 @@ let uiWorkspace = (function() {
         
         // todo
         execCallbackOnAction(targetEl.dataset.action, actionEvents.workspaceItem, {
-        id,
+            id,
         })
         
     }

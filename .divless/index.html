@@ -530,10 +530,11 @@
   <template id="tmp-list-workspace-item">
     <!-- # tmp-list-workspace-item -->
     [ .wgp-WorkspaceItem data-kind="item" .d-flex .p-half
-      [ data-slot='name' .flex-1]
+      [ data-slot="name" .flex-1]
       [
-        [btn 'Edit' data-action='edit']
-        [btn 'Delete' data-action='delete']
+        [btn 'Manage labels' data-action="manage-labels"]
+        [btn 'Edit' data-action="edit"]
+        [btn 'Delete' data-action="delete"]
       ]
     ]
   </template>
