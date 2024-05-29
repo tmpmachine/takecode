@@ -1130,11 +1130,7 @@ window.ui = (function () {
   }
   
   function attachListeners() {
-    window.listenOn('.clickable', 'click', window.DOMEvents.clickable);
-    window.listenOn('.dom-input', 'input', window.DOMEvents.inputCallbacks);
-    window.listenOn('.submittable', 'submit', window.DOMEvents.submittable);
-    window.listening('[data-onchange]', 'onchange', 'change', DOMEvents.onchange);
-    
+    DOMEvents.Init();
     blurOnEscape();
     focusOnSlashKey();
     attachKeyboardShortcuts();

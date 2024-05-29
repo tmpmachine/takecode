@@ -12,16 +12,25 @@ let uiWorkspace = (function() {
         CloseActiveWorkspaceTab,
         ListWorkspacesTab,
         OnClickWorkspaceTab,
-        
+        HandleMouseEvt,
         RestoreSession,
     };
 
     let actionEvents = {
         workspaceItem: {
-        'edit': (data) => Edit(data),
-        'delete': (data) => confirmWorkspaceDelete(data),
+            'edit': (data) => Edit(data),
+            'delete': (data) => confirmWorkspaceDelete(data),
         }
     };
+
+    function HandleMouseEvt(evt) {
+        if (evt.button !== 1) return;
+
+        let targetEl = evt.target;
+        let tabEl = targetEl.closest('[data-kind="item"]');
+        let itemId = tabEl?.dataset?.id;
+        closeWorkspaceTabById(itemId);
+    }
 
     let reloadData = debounce(300, () => {
         SaveCheckedLabels();
@@ -530,8 +539,7 @@ let uiWorkspace = (function() {
             window.appSettings.SetActiveWorkspace('');
         } else if (activeWorkspaceTab == id) {
             let activeIndex = Math.max(0, delIndex-1);
-            // window.appSettings.SetActiveWorkspace(appSettings.data.workspacesTab[activeIndex]);
-            window.ui.GoToWorkspaceTabByName(appSettings.data.workspacesTab[activeIndex]);
+            GoToWorkspaceTabByName(appSettings.data.workspacesTab[activeIndex]);
         }
         
         saveSettings(); 
