@@ -99,22 +99,21 @@ let uiWorkspace = (function() {
         return window.appSettings.data.workspaces.find(x => x.id == id);
     }
 
-    function confirmWorkspaceDelete(data) {
+    async function confirmWorkspaceDelete(data) {
         let workspace = getWorkspaceById(data.id);
         if (!workspace) return;
-        if (!window.confirm(`Delete workspace ${workspace.name}?`)) return;
         
-        window.appSettings.DeleteWorkspace(workspace.name);
+        let isConfirm = await windog.confirm(`Delete workspace ${workspace.name}?`);
+        if (!isConfirm) return;
+
+        compoWorkspace.DeleteItemById(workspace.id);
+
         compoWorkspace.Commit();
         appSettings.save();
-        
         
         deleteWorkspaceEl(data.id);
         
         windog.alert('A page reload is required to take effect.')
-
-        // closeActiveWorkspaceTab();
-        
     }
 
 

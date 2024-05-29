@@ -5,6 +5,7 @@ let compoWorkspace = (function() {
     Commit,
     UpdateItemById,
     GetItemById,
+    DeleteItemById,
     Init,
   };
   
@@ -14,6 +15,19 @@ let compoWorkspace = (function() {
   
   function Init() {
     data.items = clearReference(window.appSettings.data.workspaces);
+  }
+
+  function DeleteItemById(id) {
+    let delIndex = GetItemIndexById(id);
+    if (delIndex < 0) return null;
+    
+    let item = data.items.splice(delIndex, 1);
+    return item;
+  }
+
+  function GetItemIndexById(id) {
+    let items = GetAll();
+    return items.findIndex(item => item.id == id);
   }
 
   function GetAll() {
