@@ -2,8 +2,7 @@ let app = (function() {
 
   let SELF = {
     InitSearch,
-    
-    // data management
+    Init,
     ExportDb,
     ExportDbToBlob,
     ImportData,
@@ -12,6 +11,10 @@ let app = (function() {
     
     GetWorkspaceById,
   };
+
+  function Init() {
+    compoWorkspace.Init();
+  }
   
   function GetWorkspaceById(id) {
     return window.appSettings.data.workspaces.find(x => x.id == id);

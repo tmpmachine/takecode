@@ -1,7 +1,7 @@
 window.DOMEvents = {
 	clickable: {
 	  'logout': () => compoGsi.Logout(),
-	  'on-workspace-tab-click': (evt) => uxWorkspace.OnClickWorkspaceTab(evt.target),
+	  'on-workspace-tab-click': (evt) => uiWorkspace.OnClickWorkspaceTab(evt.target),
     'show-add-modal': () => window.ui.ShowModalAddSnippet(),
     'show-modal-add-code': () => window.ui.ShowModalAddCode(),
     'toggle-word-wrap': () => {
@@ -10,7 +10,7 @@ window.DOMEvents = {
       window.ui.ChangeAppState(STATE.codePreviewWrap, isWrap);
     },
 	  'add-label': (evt) => window.ui.AddLabel(),
-	  'add-workspace': (evt) => uxWorkspace.AddWorkspace(),
+	  'add-workspace': (evt) => uiWorkspace.AddWorkspace(),
 	  'add-snippet': (evt) => {
 	    let form = evt.target.form;
 	    window.ui.addSnippet(form);
@@ -100,7 +100,7 @@ window.DOMEvents = {
 	  'commit-resolve-conflict': () => ui.CommitResolveConflict(),
 	  'handle-click-manual-resolve': (evt) => ui.handleClickManualResolve(evt),
 	  
-	  'handle-click-list-workspace': (evt) => uxWorkspace.HandleClickListWorkspace(evt),
+	  'handle-click-list-workspace': (evt) => uiWorkspace.HandleClickListWorkspace(evt),
 	},
   
   // input event

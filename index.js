@@ -36,6 +36,7 @@
         "https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js",
         "js/dom-events.js",
         "js/util.js",
+        "js/uis/workspace-ui.js",
         "js/ui.js",
         "js/components/compo-diff.js",
         "js/components/compo-notes.js",

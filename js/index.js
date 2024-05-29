@@ -4,6 +4,7 @@ let isRunTestAssistScript = (!location.host.includes('pwa.'));
 async function initApp() {
   await window.ui.init();
   app.InitSearch();
+  app.Init();
   compoNotes.OpenDatabase().then(() => {
     runApp();
   });
@@ -16,11 +17,11 @@ function runApp() {
   if (workspace) {
     pickedLabels = workspace.labels;
   }
-  uxWorkspace.SetCheckedLabels(pickedLabels.split(','));
-  uxWorkspace.DisplayListTags(pickedLabels);
-  uxWorkspace.ListWorkspaces();
-  uxWorkspace.ListWorkspacesTab();
-  uxWorkspace.AttachListeners();
+  uiWorkspace.SetCheckedLabels(pickedLabels.split(','));
+  uiWorkspace.DisplayListTags(pickedLabels);
+  uiWorkspace.ListWorkspaces();
+  uiWorkspace.ListWorkspacesTab();
+  uiWorkspace.AttachListeners();
     
   reInitData().then(() => {
     
@@ -31,7 +32,7 @@ function runApp() {
     appSettings.GetComponentData('compoGsi', (data) => compoGsi.InitData(data) );
 
     // restore last opened workspace and code
-    uxWorkspace.RestoreSession(window.appSettings.data.activeWorkspace);
+    uiWorkspace.RestoreSession(window.appSettings.data.activeWorkspace);
     
   });
 }

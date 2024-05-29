@@ -3,6 +3,9 @@
     "index.html",
     "/"
   ],
+  "uis": [
+    "js/uis/workspace-ui.js"
+  ],
   "root": [
     "./",
     "./index.html",
